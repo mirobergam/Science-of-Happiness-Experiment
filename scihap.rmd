@@ -1,0 +1,74 @@
+---
+title: "Science of Happiness Figures"
+author: "Miroslav Bergam"
+date: "12/5/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(googlesheets4)
+sheets_deauth()
+library(tidyverse)
+
+```
+
+```{r}
+
+mood <- read_sheet("1dOPPsjbwzgqQLd3BjxBZ79y_-qY9zIt0psy5jh0r2ZY")
+productivity <- read_sheet("14U0PlLm1o05kAjPALd4hD5x97w08pBAzqQv4Sp537Pw")
+
+```
+
+```{r Alarm 1}
+
+mood1_pos <- mood %>%
+  mutate(date = as.character(date)) %>%
+  filter(str_detect(date, ".1") == TRUE) %>%
+  mutate(average_pos = (Attentive + Active + Alert + Excited + Enthusiastic + Determined + Inspired + Proud + Interested + Strong)/10) %>%
+  group_by(Experimental) %>%
+  summarise(avg = mean(average_pos))
+
+mood1_neg <- mood %>%
+  mutate(date = as.character(date)) %>%
+  filter(str_detect(date, ".1") == TRUE) %>%
+  mutate(average_neg = (Hostile + Irritable + Ashamed + Guilty + Distressed + Upset + Scared + Afraid + Jittery + Nervous)/10) %>%
+  group_by(Experimental) %>%
+  summarise(avg = mean(average_neg))
+
+ggplot(mood1_neg, aes(x = Experimental, y = avg, fill = Experimental)) + 
+  geom_col() + 
+  labs(title = "Average Negative Affect at 10 A.M.",
+       caption = "Mean of personal scores for Hostile, Irritable, Ashamed, Guilty, \n Distressed, Upset, Scared, Afraid, Jittery, and Nervous",
+       y = "Average PANAS Score",
+       x = "") + 
+  theme(legend.position = "none")
+
+ggplot(mood1_pos, aes(x = Experimental, y = avg, fill = Experimental)) + 
+  geom_col() +
+    labs(title = "Average Positive Affect at 10 A.M.",
+       caption = "Mean of personal scores for Attentive, Active, Alert, Excited, \n Enthusiastic, Determined, Inspired, Proud, Interested, Strong",
+       y = "Average PANAS Score",
+       x = "") + 
+  theme(legend.position = "none")
+
+
+
+```
+
+```{r Alarm 2}
+
+```
+
+```{r Alarm 3}
+
+```
+
+```{r Alarm 4}
+
+```
+
+
+
+
